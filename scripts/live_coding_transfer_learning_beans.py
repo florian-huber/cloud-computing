@@ -14,12 +14,12 @@ print(base_model.summary())
 
 
 #%% Import dataset and process images
-
 def resize_preprocess(image, width, height):
     """Resize images to width x height.
     """
     image = tf.image.resize(image, (width, height)) / 255.0
     return image
+
 
 image_train, label_train = tfds.as_numpy(tfds.load(
     'beans',
@@ -40,40 +40,6 @@ image_val = resize_preprocess(image_val, image_x, image_y)
 print(f"Imported data. Training data has shape {image_train.shape}.")
 print(f"Validation data has shape {image_val.shape}.")
 
-#%% Translate labels to one hot encoding
-import pandas as pd
-label_train_onehot = pd.get_dummies(label_train).values
-label_val_onehot = pd.get_dummies(label_val).values
-
-
-
-
-#%% Import dataset and process images
-
-def resize_preprocess(image, width, height):
-    """Resize images to width x height.
-    """
-    image = tf.image.resize(image, (width, height)) / 255.0
-    return image
-
-image_train, label_train = tfds.load(
-    'beans',
-    split= "train", #'test',
-    batch_size=-1,
-    as_supervised=True,
-)
-
-image_val, label_val = tfds.load(
-    'beans',
-    split= "validation",
-    batch_size=-1,
-    as_supervised=True,
-)
-
-image_train = resize_preprocess(image_train, image_x, image_y)
-image_val = resize_preprocess(image_val, image_x, image_y)
-print(f"Imported data. Training data has shape {image_train.shape}.")
-print(f"Validation data has shape {image_val.shape}.")
 
 #%% Translate labels to one hot encoding
 import pandas as pd
@@ -82,10 +48,10 @@ label_val_onehot = pd.get_dummies(label_val).values
 
 
 #%% Compile new model
-
 from tensorflow.keras import applications
 from tensorflow.keras import Model
 from tensorflow.keras.layers import Flatten, Dense
+
 
 # Freeze the already-trained layers in the base model
 for layer in base_model.layers:
